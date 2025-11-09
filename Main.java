@@ -4,10 +4,37 @@ public class Main {
     public static void main(String[] args) {
         System.out.println("=== ТЕСТИРОВАНИЕ TABULATEDFUNCTION ===\n");
 
-        // используем интерфейсный тип, но конкретную реализацию
-        TabulatedFunction function = new ArrayTabulatedFunction(0, 4, 5);
+        // тестирование ArrayTabulatedFunction
+        System.out.println("=".repeat(50));
+        System.out.println("ТЕСТИРОВАНИЕ ArrayTabulatedFunction");
+        System.out.println("=".repeat(50));
 
-        System.out.println("1. Создание функции y = x^2");
+        TabulatedFunction arrayFunction = new ArrayTabulatedFunction(0, 4, 5);
+        testTabulatedFunction(arrayFunction, "ArrayTabulatedFunction");
+
+        // тестирование LinkedListTabulatedFunction
+        System.out.println("\n" + "=".repeat(50));
+        System.out.println("ТЕСТИРОВАНИЕ LinkedListTabulatedFunction");
+        System.out.println("=".repeat(50));
+
+        TabulatedFunction linkedListFunction = new LinkedListTabulatedFunction(0, 4, 5);
+        testTabulatedFunction(linkedListFunction, "LinkedListTabulatedFunction");
+
+        // тестирование исключений
+        System.out.println("\n" + "=".repeat(50));
+        System.out.println("ТЕСТИРОВАНИЕ ИСКЛЮЧЕНИЙ");
+        System.out.println("=".repeat(50));
+
+        testAllExceptions();
+
+        System.out.println("\n" + "=".repeat(50));
+        System.out.println("ТЕСТИРОВАНИЕ ЗАВЕРШЕНО");
+        System.out.println("=".repeat(50));
+    }
+
+    // универсальная функция для тестирования любой реализации TabulatedFunction
+    private static void testTabulatedFunction(TabulatedFunction function, String functionType) {
+        System.out.println("\n1. Создание функции y = x^2 для " + functionType);
 
         // устанавливаем значения y согласно квадратичной функции x^2
         for (int i = 0; i < function.getPointsCount(); i++) {
@@ -106,20 +133,6 @@ public class Main {
         for (int i = 0; i < function.getPointsCount(); i++) {
             System.out.printf("(%.2f, %.2f)%n", function.getPointX(i), function.getPointY(i));
         }
-
-        // 9. ТЕСТИРОВАНИЕ ИСКЛЮЧЕНИЙ
-        System.out.println("\n" + "=".repeat(50));
-        System.out.println("9. ТЕСТИРОВАНИЕ ИСКЛЮЧЕНИЙ");
-        System.out.println("=".repeat(50));
-
-        testAllExceptions();
-
-        // 10. тестирование LinkedListTabulatedFunction
-        System.out.println("\n" + "=".repeat(50));
-        System.out.println("10. ТЕСТИРОВАНИЕ LinkedListTabulatedFunction");
-        System.out.println("=".repeat(50));
-
-        testLinkedListImplementation();
     }
 
     private static void testAllExceptions() {
@@ -200,48 +213,5 @@ public class Main {
         } catch (IllegalStateException e) {
             System.out.println(":) IllegalStateException: " + e.getMessage());
         }
-    }
-
-    private static void testLinkedListImplementation() {
-        System.out.println("\nСоздание LinkedListTabulatedFunction...");
-
-        // используем тот же интерфейсный тип, но другую реализацию
-        TabulatedFunction linkedListFunction = new LinkedListTabulatedFunction(0, 4, 5);
-
-        // тестируем базовую функциональность
-        for (int i = 0; i < linkedListFunction.getPointsCount(); i++) {
-            double x = linkedListFunction.getPointX(i);
-            linkedListFunction.setPointY(i, x * x);
-        }
-
-        System.out.println("Точки LinkedListTabulatedFunction (y = x²):");
-        for (int i = 0; i < linkedListFunction.getPointsCount(); i++) {
-            System.out.printf("(%.2f, %.2f) - проверка: %.2f² = %.2f%n",
-                    linkedListFunction.getPointX(i),
-                    linkedListFunction.getPointY(i),
-                    linkedListFunction.getPointX(i),
-                    linkedListFunction.getPointX(i) * linkedListFunction.getPointX(i));
-        }
-
-        // тестируем исключения для LinkedList реализации
-        System.out.println("\nТестирование исключений в LinkedListTabulatedFunction:");
-
-        try {
-            System.out.println("Пытаемся получить точку с индексом 10 (вне границ)");
-            linkedListFunction.getPoint(10);
-            System.out.println("ОШИБКА: Исключение не было выброшено!");
-        } catch (FunctionPointIndexOutOfBoundsException e) {
-            System.out.println(":) FunctionPointIndexOutOfBoundsException: " + e.getMessage());
-        }
-
-        try {
-            System.out.println("Пытаемся добавить точку (2.0, 4.0) - X=2.0 уже существует");
-            linkedListFunction.addPoint(new FunctionPoint(2.0, 4.0));
-            System.out.println("ОШИБКА: Исключение не было выброшено!");
-        } catch (InappropriateFunctionPointException e) {
-            System.out.println(":) InappropriateFunctionPointException: " + e.getMessage());
-        }
-
-        System.out.println("\nLinkedListTabulatedFunction работает корректно!");
     }
 }
